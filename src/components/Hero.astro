@@ -1,8 +1,6 @@
 ---
 import { design, heroImages } from '../data/site';
-import HeroSwitcher from './HeroSwitcher.astro';
 
-const dev = import.meta.env.DEV;
 const hero = heroImages.find((h) => h.id === design.hero) ?? heroImages[0];
 ---
 
@@ -28,5 +26,4 @@ const hero = heroImages.find((h) => h.id === design.hero) ?? heroImages[0];
       </a>
     </div>
   </div>
-  {dev && <HeroSwitcher current={hero.id} />}
 </section>

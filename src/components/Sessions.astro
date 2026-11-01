@@ -1,8 +1,5 @@
 ---
 import { sessions, design } from '../data/site';
-import DevSwitcher from './DevSwitcher.astro';
-
-const dev = import.meta.env.DEV;
 ---
 
 <section class="sessions" id="sessions">
@@ -14,8 +11,6 @@ const dev = import.meta.env.DEV;
       </div>
       <p class="lede">Animal readings begin with a photo, their name and their species. For channeling, just bring your questions. Not sure where to start? A written reading is a gentle first step.</p>
     </div>
-
-    {dev && <DevSwitcher />}
 
     <div class="menu">
       {sessions.map((s) => (
