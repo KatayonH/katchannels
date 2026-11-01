@@ -1,30 +1,13 @@
 ---
 // Only rendered on localhost (see Sessions.astro). Never ships to the live site.
-import { design, buttonStyles, cardStyles } from '../data/site';
-
-const layouts = [
-  { label: 'Menu list', value: 'menu' },
-  { label: 'Cards', value: 'cards' },
-];
+import { design, buttonStyles } from '../data/site';
 ---
 
-<div class="dev-switch" aria-label="Design options (localhost only)">
+<div class="dev-switch" aria-label="Button style options (localhost only)">
   <div class="dev-row">
-    <span>Dev only: layout</span>
-    {layouts.map((l) => (
-      <button type="button" data-set="layout" data-value={l.value} aria-pressed={String(l.value === design.layout)}>{l.label}</button>
-    ))}
-  </div>
-  <div class="dev-row">
-    <span>Card style</span>
-    {cardStyles.map((c) => (
-      <button type="button" data-set="card" data-value={c.value} aria-pressed={String(c.value === design.card)}>{c.label}</button>
-    ))}
-  </div>
-  <div class="dev-row">
-    <span>Button style</span>
+    <span>Dev only: button style</span>
     {buttonStyles.map((b) => (
-      <button type="button" data-set="button" data-value={b.cls} aria-pressed={String(b.cls === design.button)}>{b.label}</button>
+      <button type="button" data-value={b.cls} aria-pressed={String(b.cls === design.button)}>{b.label}</button>
     ))}
   </div>
 </div>
@@ -32,9 +15,6 @@ const layouts = [
 <style>
   .dev-switch {
     align-self: flex-start;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
     padding: 10px 12px;
     background: rgba(15, 32, 56, 0.7);
     border: 1px dashed rgba(197, 163, 107, 0.6);
@@ -59,36 +39,26 @@ const layouts = [
 </style>
 
 <script>
-  const section = document.getElementById('sessions');
-  const kbClasses = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-set="button"]')).map((b) => b.dataset.value!);
-  const saved = (() => {
-    try { return JSON.parse(localStorage.getItem('kc-dev-design') || '{}'); } catch { return {}; }
-  })();
+  const options = Array.from(document.querySelectorAll<HTMLButtonElement>('.dev-switch button'));
+  const classes = options.map((b) => b.dataset.value!);
 
-  function apply(key: string, value: string) {
-    if (!section) return;
-    if (key === 'layout') section.dataset.layout = value;
-    if (key === 'card') section.dataset.card = value;
-    if (key === 'button') {
-      section.querySelectorAll('[data-kb]').forEach((a) => {
-        a.classList.remove(...kbClasses);
-        a.classList.add(value);
-      });
-    }
-    document.querySelectorAll<HTMLButtonElement>(`[data-set="${key}"]`).forEach((b) => {
-      b.setAttribute('aria-pressed', String(b.dataset.value === value));
+  function apply(cls: string) {
+    document.querySelectorAll('[data-kb]').forEach((a) => {
+      a.classList.remove(...classes);
+      a.classList.add(cls);
     });
+    options.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.value === cls)));
   }
 
-  for (const [k, v] of Object.entries(saved)) apply(k, v as string);
+  try {
+    const saved = localStorage.getItem('kc-dev-button');
+    if (saved && classes.includes(saved)) apply(saved);
+  } catch { /* storage unavailable */ }
 
-  document.querySelectorAll<HTMLButtonElement>('.dev-switch button').forEach((b) => {
+  options.forEach((b) =>
     b.addEventListener('click', () => {
-      const key = b.dataset.set!;
-      const value = b.dataset.value!;
-      apply(key, value);
-      saved[key] = value;
-      try { localStorage.setItem('kc-dev-design', JSON.stringify(saved)); } catch { /* storage unavailable */ }
-    });
-  });
+      apply(b.dataset.value!);
+      try { localStorage.setItem('kc-dev-button', b.dataset.value!); } catch { /* storage unavailable */ }
+    }),
+  );
 </script>

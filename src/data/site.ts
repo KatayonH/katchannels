@@ -86,44 +86,63 @@ export const steps = [
   },
 ];
 
-// draft: true marks policy answers Kat still needs to confirm (badge shows in dev only).
-export const faqs = [
+export const CONTACT_EMAIL = 'hello@katchannels.com';
+
+export const social = {
+  instagram: 'https://www.instagram.com/kat_channels/',
+  tiktok: 'https://www.tiktok.com/@kat_channels',
+};
+
+export const DISCLAIMER =
+  'Readings are intuitive and are not a substitute for veterinary, medical, legal or financial advice.';
+
+export const faqGroups = [
   {
-    q: 'What do you need from me before a reading?',
-    a: "A clear photo of your animal, their name and their species. I don't need their history, symptoms or what you think is going on. Keeping those out lets the reading come through clearly.",
-    draft: false,
+    title: 'Before your session',
+    items: [
+      {
+        q: 'What do you need from me before a reading?',
+        a: "For an animal reading, a clear photo of your animal, their name and their species. I don't need their history, symptoms or what you think is going on. Keeping those out lets the reading come through clearly. For a channeling session, there's nothing to send ahead. Just bring your questions.",
+      },
+      {
+        q: 'Can you connect with an animal who has passed?',
+        a: 'Yes. Written and live readings are both available for animals who have crossed over, at the same price as a reading for a living animal.',
+      },
+      {
+        q: 'How do I prepare for a live session?',
+        a: "Find a quiet spot with a steady internet connection and have your animal's photo nearby. Bring any questions you'd like me to ask them.",
+      },
+      {
+        q: 'Is a reading a substitute for my vet or doctor?',
+        a: "No. Readings are intuitive and are not a substitute for veterinary, medical, legal or financial advice. If something physical comes up in a reading, please take it to your vet.",
+      },
+    ],
   },
   {
-    q: 'Can you connect with an animal who has passed?',
-    a: 'Yes. Written and live readings are both available for animals who have crossed over, at the same price as a reading for a living animal.',
-    draft: false,
-  },
-  {
-    q: 'How do I prepare for a live session?',
-    a: "Find a quiet spot with a steady internet connection and have your animal's photo nearby. Bring any questions you'd like me to ask them.",
-    draft: false,
-  },
-  {
-    q: 'What is your cancellation policy?',
-    a: 'Cancel a live session at least 48 hours before it starts and your payment is refunded in full, automatically. Within 48 hours, I can move your session once.',
-    draft: false,
-  },
-  {
-    q: 'Are sessions refundable?',
-    a: "Once a written reading has been sent or a live session has taken place, it isn't refundable. If something went wrong on my end, reach out and I'll make it right.",
-    draft: true,
-  },
-  {
-    q: 'What happens if I miss my appointment?',
-    a: "A missed live session without notice counts as completed. Message me within 24 hours and I'll do my best to offer one new time.",
-    draft: true,
+    title: 'Booking and policies',
+    items: [
+      {
+        q: 'What is your cancellation policy?',
+        a: 'Cancel a live session at least 48 hours before it starts and your payment is refunded in full, automatically. Within 48 hours, I can move your session once. Written readings can be refunded within 48 hours of purchase.',
+      },
+      {
+        q: 'Are sessions refundable after they happen?',
+        a: "Once a written reading has been delivered or a live session has taken place, it isn't refundable. Readings are intuitive, so I can't guarantee specific details or outcomes. If a technical problem on my end stops a live session from happening, I'll reschedule it at no cost.",
+      },
+      {
+        q: 'What happens if I miss my appointment?',
+        a: "A missed live session without notice counts as completed. Message me within 24 hours and I'll do my best to offer one new time.",
+      },
+      {
+        q: 'How do I reach you?',
+        a: 'Email me at hello@katchannels.com and I\'ll get back to you.',
+      },
+    ],
   },
 ];
 
-// Defaults used in production. The dev-only switcher can override these on localhost.
+// Session button style used in production. The dev-only switcher can override it on localhost.
 export const design = {
-  layout: 'menu' as 'menu' | 'cards',
-  card: 'velvet' as 'glass' | 'velvet' | 'moonglow' | 'golddust',
   button: 'kb-arrow',
 };
 
@@ -140,11 +159,4 @@ export const buttonStyles = [
   { label: '9 Star', cls: 'kb-star' },
   { label: '10 Faded lines', cls: 'kb-fade' },
   { label: '11 Solid ivory', cls: 'kb-ivory' },
-];
-
-export const cardStyles = [
-  { label: 'Glass', value: 'glass' },
-  { label: 'A Velvet', value: 'velvet' },
-  { label: 'B Moon glow', value: 'moonglow' },
-  { label: 'C Gold dust', value: 'golddust' },
 ];

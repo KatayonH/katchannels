@@ -1,17 +1,22 @@
+---
+// On other pages (like /privacy), section links need to point back to the home page.
+const { home = '' } = Astro.props as { home?: string };
+---
+
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="#top" aria-label="Kat Channels, home">
+    <a class="brand" href={`${home}#top`} aria-label="Kat Channels, home">
       <img class="brand-mark" src="/images/kc-mark.png" alt="" width="82" height="64" />
       <img class="brand-word" src="/images/kc-wordmark.png" alt="Kat Channels" width="976" height="80" />
     </a>
     <nav class="nav-links" id="nav-links" aria-label="Main">
-      <a href="#about">About</a>
-      <a href="#sessions">Sessions</a>
-      <a href="#process">The Process</a>
-      <a href="#faq">FAQ</a>
+      <a href={`${home}#about`}>About</a>
+      <a href={`${home}#sessions`}>Sessions</a>
+      <a href={`${home}#process`}>The Process</a>
+      <a href={`${home}#faq`}>FAQ</a>
     </nav>
     <div class="nav-actions">
-      <a class="btn-outline nav-book" href="#book">Book<span class="nav-book-long"> a session</span></a>
+      <a class="btn-outline nav-book" href={`${home}#book`}>Book<span class="nav-book-long"> a session</span></a>
       <button class="nav-toggle" type="button" aria-controls="nav-links" aria-expanded="false" aria-label="Menu">
         <span></span><span></span>
       </button>

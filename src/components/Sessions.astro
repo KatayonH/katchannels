@@ -3,12 +3,9 @@ import { sessions, design } from '../data/site';
 import DevSwitcher from './DevSwitcher.astro';
 
 const dev = import.meta.env.DEV;
-// In production only the chosen layout is rendered; on localhost both are, so the switcher can flip between them.
-const showMenu = dev || design.layout === 'menu';
-const showCards = dev || design.layout === 'cards';
 ---
 
-<section class="sessions" id="sessions" data-layout={design.layout} data-card={design.card}>
+<section class="sessions" id="sessions">
   <div class="wrap">
     <div class="section-head">
       <div>
@@ -20,39 +17,21 @@ const showCards = dev || design.layout === 'cards';
 
     {dev && <DevSwitcher />}
 
-    {showMenu && (
-      <div class="menu">
-        {sessions.map((s) => (
-          <div class="menu-row">
-            <img class="menu-moon" src={s.moon} alt="" width={s.moonSize[0]} height={s.moonSize[1]} />
-            <div class="menu-body">
-              <h3 class="display">{s.title} <em>{s.titleItalic}</em></h3>
-              <div class="menu-meta">{s.forWho} · {s.meta}</div>
-              <p>{s.text}</p>
-            </div>
-            <div class="menu-price">
-              <div class="price">{s.price}</div>
-              <a class={`kb ${design.button}`} href={`#book-${s.id}`} data-kb data-book={s.id}>{s.cta}</a>
-            </div>
-          </div>
-        ))}
-      </div>
-    )}
-
-    {showCards && (
-      <div class="cards">
-        {sessions.map((s) => (
-          <article class="card">
-            <img class="card-moon" src={s.moon} alt="" width={s.moonSize[0]} height={s.moonSize[1]} loading="lazy" />
+    <div class="menu">
+      {sessions.map((s) => (
+        <div class="menu-row">
+          <img class="menu-moon" src={s.moon} alt="" width={s.moonSize[0]} height={s.moonSize[1]} />
+          <div class="menu-body">
             <h3 class="display">{s.title} <em>{s.titleItalic}</em></h3>
-            <div class="menu-meta">{s.forWho}</div>
+            <div class="menu-meta">{s.forWho} · {s.meta}</div>
             <p>{s.text}</p>
+          </div>
+          <div class="menu-price">
             <div class="price">{s.price}</div>
-            <div class="card-meta">{s.meta}</div>
             <a class={`kb ${design.button}`} href={`#book-${s.id}`} data-kb data-book={s.id}>{s.cta}</a>
-          </article>
-        ))}
-      </div>
-    )}
+          </div>
+        </div>
+      ))}
+    </div>
   </div>
 </section>
