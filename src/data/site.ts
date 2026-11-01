@@ -17,8 +17,24 @@ export interface Session {
   /** Which "You're booked" pop-up to show after paying. */
   kind: 'animal' | 'channeling';
   /** Stripe Payment Link (no time slot) or a Cal.com event (pick a time). */
-  booking: { type: 'stripe'; url: string } | { type: 'cal'; calLink: string };
+  booking: Booking;
+  /** Small line under the price, e.g. the extra-animal add-on. */
+  extra?: string;
+  /** Animal readings: one option per number of animals (1, 2, 3), each with its own price and booking. */
+  options?: AnimalOption[];
 }
+
+export type Booking = { type: 'stripe'; url: string } | { type: 'cal'; calLink: string };
+
+export interface AnimalOption {
+  count: number;
+  price: string;
+  /** Call length for live readings. */
+  length?: string;
+  booking: Booking;
+}
+
+const EXTRA_ANIMAL = '+$80 per extra animal, up to 3';
 
 export const sessions: Session[] = [
   {
@@ -35,6 +51,12 @@ export const sessions: Session[] = [
     tab: 'Written',
     kind: 'animal',
     booking: { type: 'stripe', url: 'https://buy.stripe.com/8x228rf2v72I5LK7zm67S00' },
+    extra: EXTRA_ANIMAL,
+    options: [
+      { count: 1, price: '$180', booking: { type: 'stripe', url: 'https://buy.stripe.com/8x228rf2v72I5LK7zm67S00' } },
+      { count: 2, price: '$260', booking: { type: 'stripe', url: 'https://buy.stripe.com/bJecN52fJ86Mb648Dq67S01' } },
+      { count: 3, price: '$340', booking: { type: 'stripe', url: 'https://buy.stripe.com/8x26oH3jNaeU3DC9Hu67S02' } },
+    ],
   },
   {
     id: 'live',
@@ -50,6 +72,12 @@ export const sessions: Session[] = [
     tab: 'Live',
     kind: 'animal',
     booking: { type: 'cal', calLink: 'katchannels/live-reading' },
+    extra: EXTRA_ANIMAL,
+    options: [
+      { count: 1, price: '$200', length: '1 hour', booking: { type: 'cal', calLink: 'katchannels/live-reading' } },
+      { count: 2, price: '$280', length: '1 hour', booking: { type: 'cal', calLink: 'katchannels/live-reading-2' } },
+      { count: 3, price: '$360', length: '90 minutes', booking: { type: 'cal', calLink: 'katchannels/live-reading-3' } },
+    ],
   },
   {
     id: 'channeling',
@@ -77,7 +105,7 @@ export const steps = [
   {
     icon: '/images/step-2.png',
     title: 'Send three things',
-    text: "A photo, your animal's name and their species. That's all I need. Please leave out their history and symptoms so the reading stays clear. For a channeling session, have your questions ready.",
+    text: "For each animal, a photo, their name and their species. That's all I need. Please leave out their history and symptoms so the reading stays clear. For a channeling session, have your questions ready.",
   },
   {
     icon: '/images/step-3.png',
@@ -87,6 +115,9 @@ export const steps = [
 ];
 
 export const CONTACT_EMAIL = 'hello@katchannels.com';
+
+// Tally intake form for animal readings (photo, name, species, up to 3 animals).
+export const INTAKE_FORM_URL = 'https://tally.so/r/M1Xbxk';
 
 export const social = {
   instagram: 'https://www.instagram.com/kat_channels/',
@@ -102,11 +133,15 @@ export const faqGroups = [
     items: [
       {
         q: 'What do you need from me before a reading?',
-        a: "For an animal reading, a clear photo of your animal, their name and their species. I don't need their history, symptoms or what you think is going on. Keeping those out lets the reading come through clearly. For a channeling session, there's nothing to send ahead. Just bring your questions.",
+        a: "For an animal reading, a clear photo of each animal, their name and their species. I don't need their history, symptoms or what you think is going on. Keeping those out lets the reading come through clearly. For a channeling session, there's nothing to send ahead. Just bring your questions.",
       },
       {
         q: 'Can you connect with an animal who has passed?',
         a: 'Yes. Written and live readings are both available for animals who have crossed over, at the same price as a reading for a living animal.',
+      },
+      {
+        q: 'Can I include more than one animal?',
+        a: 'Yes, up to three in one booking. Each extra animal is $80. A written reading is $180 for one animal, $260 for two and $340 for three. A live reading is $200 for one animal, $280 for two (both 1 hour) and $360 for three (90 minutes). Choose how many animals when you book.',
       },
       {
         q: 'How do I prepare for a live session?',
@@ -144,7 +179,19 @@ export const faqGroups = [
 // Session button style used in production. The dev-only switcher can override it on localhost.
 export const design = {
   button: 'kb-arrow',
+  hero: 'ivy-arch',
 };
+
+// Hero image options. The dev-only switcher in the hero lets you compare them on localhost.
+export const heroImages = [
+  { id: 'current', label: 'Current', src: '/images/hero-garden-arch.jpg', size: [1536, 1024], position: '50% 45%', alt: 'A stone garden archway draped in deep red roses, opening onto a lantern-lit path at dusk' },
+  { id: 'misty-dusk', label: '1 Misty dusk', src: '/images/hero-1.jpg', size: [1672, 941], position: '50% 50%', alt: 'A stone archway framed by red roses, opening onto a misty garden path at dusk' },
+  { id: 'golden-hour', label: '2 Golden hour', src: '/images/hero-2.jpg', size: [1536, 1024], position: '50% 50%', alt: 'A sunlit stone archway with white roses, opening onto a garden path and stone urn' },
+  { id: 'open-gates', label: '3 Open gates', src: '/images/hero-3.jpg', size: [1536, 1024], position: '50% 55%', alt: 'Open iron gates in a rose-covered stone arch, with a lantern-lit path at sunset' },
+  { id: 'crescent-moon', label: '4 Crescent moon', src: '/images/hero-4.jpg', size: [1670, 941], position: '50% 40%', alt: 'A stone archway at night with a crescent moon over cypress trees and lantern-lit steps' },
+  { id: 'side-arch', label: '5 Side arch', src: '/images/hero-5.jpg', size: [1672, 941], position: '100% 50%', alt: 'A rose-covered stone archway on the right, opening onto a glowing garden path at dusk' },
+  { id: 'ivy-arch', label: '6 Ivy arch', src: '/images/hero-6.jpg', size: [1358, 1159], position: '100% 25%', alt: 'An ivy-covered stone archway opening onto a lantern-lit garden path at sunset' },
+];
 
 export const buttonStyles = [
   { label: 'Glass', cls: 'kb-glass' },

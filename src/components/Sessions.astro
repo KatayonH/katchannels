@@ -28,6 +28,7 @@ const dev = import.meta.env.DEV;
           </div>
           <div class="menu-price">
             <div class="price">{s.price}</div>
+            {s.extra && <div class="price-extra">{s.extra}</div>}
             <a class={`kb ${design.button}`} href={`#book-${s.id}`} data-kb data-book={s.id}>{s.cta}</a>
           </div>
         </div>

@@ -12,7 +12,7 @@ import { design, buttonStyles } from '../data/site';
   </div>
 </div>
 
-<style>
+<style is:inline>
   .dev-switch {
     align-self: flex-start;
     padding: 10px 12px;
@@ -22,7 +22,7 @@ import { design, buttonStyles } from '../data/site';
   }
   .dev-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
   .dev-row span { font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-right: 4px; }
-  button {
+  .dev-switch button {
     font-family: var(--sans);
     font-size: 10px;
     font-weight: 600;
@@ -35,7 +35,7 @@ import { design, buttonStyles } from '../data/site';
     background: transparent;
     border: 1px solid var(--gold);
   }
-  button[aria-pressed='true'] { color: var(--navy); background: var(--gold); }
+  .dev-switch button[aria-pressed='true'] { color: var(--navy); background: var(--gold); }
 </style>
 
 <script>

@@ -2,6 +2,7 @@
 // After-payment pop-up.
 // - Cal.com bookings: opened by the 'kc:booked' event fired from the booking panel (Book.astro).
 // - Stripe Payment Link (Written Reading): Stripe redirects to https://katchannels.com/?booked=animal after payment.
+import { INTAKE_FORM_URL } from '../data/site';
 ---
 <dialog class="booked" id="booked" aria-labelledby="booked-title">
   <button type="button" class="booked-close" aria-label="Close" data-close>
@@ -22,8 +23,7 @@
         </ul>
         <p>If there's anything you'd like me to ask them, add that too. Please leave out their history and symptoms so the reading stays clear.</p>
       </div>
-      {/* TODO: link to the intake form (Tally, Google Forms, etc.). */}
-      <a class="kb kb-glass" href="#" style="align-self: flex-start; margin: 18px 0">Share your animal's details</a>
+      <a class="kb kb-glass" href={INTAKE_FORM_URL} target="_blank" rel="noopener" style="align-self: flex-start; margin: 18px 0">Share your animal's details</a>
       <p class="small">This private link is also in your confirmation email, so you can come back to it anytime before our session.</p>
     </div>
 

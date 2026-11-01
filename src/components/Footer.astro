@@ -7,8 +7,8 @@ const { home = '' } = Astro.props as { home?: string };
 
 <footer class="footer">
   <div class="wrap">
-    <a href={`${home}#top`} aria-label="Kat Channels, back to top">
-      <img class="footer-logo" src="/images/kc-logo.png" alt="Kat Channels" width="195" height="400" />
+    <a class="brand footer-brand" href={`${home}#top`} aria-label="Kat Channels, back to top">
+      <img class="brand-word" src="/images/kc-wordmark.png" alt="Kat Channels" width="976" height="80" loading="lazy" />
     </a>
     <nav class="nav-links" aria-label="Footer">
       <a href={`${home}#about`}>About</a>

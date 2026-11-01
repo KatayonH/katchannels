@@ -9,12 +9,11 @@ const first = sessions[0];
   <img class="bouquet bouquet-left" src="/images/bouquet-left.jpg" alt="" width="1020" height="682" loading="lazy" />
   <img class="bouquet bouquet-right" src="/images/bouquet-right.jpg" alt="" width="1020" height="682" loading="lazy" />
   <div class="wrap">
-    <img class="divider" src="/images/divider.png" alt="" width="1181" height="19" loading="lazy" />
+    <img class="booker-logo" src="/images/kc-logo.png" alt="" width="195" height="400" loading="lazy" />
     <h2 class="display">Ready <em>to connect?</em></h2>
     <p class="lede">Book your session today. Take your time gathering your photos and questions. After booking, you'll receive a private link to share everything I need before we connect.</p>
 
     <div class="booker">
-      <img class="booker-logo" src="/images/kc-logo.png" alt="" width="195" height="400" />
       <div class="booker-tabs" role="tablist" aria-label="Choose a session">
         {sessions.map((s) => (
           <button
@@ -42,19 +41,35 @@ const first = sessions[0];
           data-kind={s.kind}
           hidden={s.id !== first.id}
         >
-          {s.booking.type === 'stripe' ? (
-            <div class="booker-pay">
-              <img class="booker-moon" src={s.moon} alt="" width={s.moonSize[0]} height={s.moonSize[1]} loading="lazy" />
-              <h3 class="display">{s.title} <em>{s.titleItalic}</em></h3>
-              <div class="menu-meta">{s.forWho} · {s.meta}</div>
-              <p>No time slot needed. Pay securely through Stripe, then send me a photo, your animal's name and their species. Your reading arrives in your inbox within 7 days.</p>
-              <a class="booker-cta" href={s.booking.url}>Pay {s.price} and book</a>
-            </div>
-          ) : (
-            <div class="cal-frame" data-cal-link={s.booking.calLink} data-cal-ns={s.id}>
-              <p class="cal-loading">Loading the calendar…</p>
+          {s.options && (
+            <div class="animal-count" role="radiogroup" aria-label="How many animals?">
+              <span class="animal-count-label">How many animals?</span>
+              {s.options.map((o) => (
+                <button type="button" role="radio" aria-checked={String(o.count === 1)} data-count={o.count}>
+                  <span class="animal-count-num">{o.count}</span>
+                  <span class="animal-count-price">{o.price}</span>
+                  {o.length && <span class="animal-count-length">{o.length}</span>}
+                </button>
+              ))}
             </div>
           )}
+          {(s.options ?? [{ count: 1, price: s.price, booking: s.booking }]).map((o) => (
+            <div class="booker-option" data-option={o.count} hidden={o.count !== 1}>
+              {o.booking.type === 'stripe' ? (
+                <div class="booker-pay">
+                  <img class="booker-moon" src={s.moon} alt="" width={s.moonSize[0]} height={s.moonSize[1]} loading="lazy" />
+                  <h3 class="display">{s.title} <em>{s.titleItalic}</em></h3>
+                  <div class="menu-meta">{o.count === 1 ? '1 animal' : `${o.count} animals`} · {s.meta}</div>
+                  <p>No time slot needed. Pay securely through Stripe, then send me a photo, the name and the species {o.count === 1 ? 'of your animal' : 'of each animal'}. Your {o.count === 1 ? 'reading arrives' : 'readings arrive'} in your inbox within 7 days.</p>
+                  <a class="booker-cta" href={o.booking.url}>Pay {o.price} and book</a>
+                </div>
+              ) : (
+                <div class="cal-frame" data-cal-link={o.booking.calLink} data-cal-ns={o.count === 1 ? s.id : `${s.id}${o.count}`}>
+                  <p class="cal-loading">Loading the calendar…</p>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       ))}
     </div>
@@ -109,7 +124,8 @@ const first = sessions[0];
   }
 
   function startCalendar(panel: HTMLElement) {
-    const frame = panel.querySelector<HTMLElement>('[data-cal-link]');
+    // Only the calendar for the chosen number of animals.
+    const frame = panel.querySelector<HTMLElement>('[data-option]:not([hidden]) [data-cal-link]');
     if (!frame) return;
     const ns = frame.dataset.calNs!;
     if (started.has(ns)) return;
@@ -160,6 +176,30 @@ const first = sessions[0];
       if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
       const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
       select(next.dataset.tab!, true);
+    });
+  });
+
+  // "How many animals?" switches which price, payment link or calendar is shown in that panel.
+  panels.forEach((panel) => {
+    const choices = Array.from(panel.querySelectorAll<HTMLButtonElement>('[data-count]'));
+    choices.forEach((btn, i) => {
+      const choose = (b: HTMLButtonElement, focus = false) => {
+        choices.forEach((c) => {
+          const on = c === b;
+          c.setAttribute('aria-checked', String(on));
+          c.tabIndex = on ? 0 : -1;
+          if (on && focus) c.focus();
+        });
+        panel.querySelectorAll<HTMLElement>('[data-option]').forEach((o) => { o.hidden = o.dataset.option !== b.dataset.count; });
+        if (bookVisible) startCalendar(panel);
+      };
+      btn.tabIndex = btn.getAttribute('aria-checked') === 'true' ? 0 : -1;
+      btn.addEventListener('click', () => choose(btn));
+      btn.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        choose(choices[(i + (e.key === 'ArrowRight' ? 1 : choices.length - 1)) % choices.length], true);
+      });
     });
   });
 

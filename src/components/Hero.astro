@@ -1,10 +1,19 @@
+---
+import { design, heroImages } from '../data/site';
+import HeroSwitcher from './HeroSwitcher.astro';
+
+const dev = import.meta.env.DEV;
+const hero = heroImages.find((h) => h.id === design.hero) ?? heroImages[0];
+---
+
 <section class="hero" id="top">
   <img
     class="hero-art"
-    src="/images/hero-garden-arch.jpg"
-    alt="A stone garden archway draped in deep red roses, opening onto a lantern-lit path at dusk"
-    width="1536"
-    height="1024"
+    src={hero.src}
+    alt={hero.alt}
+    width={hero.size[0]}
+    height={hero.size[1]}
+    style={`object-position: ${hero.position}`}
     fetchpriority="high"
   />
   <div class="hero-shade" aria-hidden="true"></div>
@@ -19,8 +28,5 @@
       </a>
     </div>
   </div>
-  <div class="hero-words" aria-hidden="true">
-    <div>CONNECTION<br />UNDERSTANDING<br />CLARITY<br />BEYOND WORDS</div>
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#E2C894" stroke-width="1"><path d="M12 1v22M1 12h22"></path><path d="M12 7l1.2 3.8L17 12l-3.8 1.2L12 17l-1.2-3.8L7 12l3.8-1.2z"></path></svg>
-  </div>
+  {dev && <HeroSwitcher current={hero.id} />}
 </section>
