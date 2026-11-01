@@ -15,7 +15,7 @@ const showCards = dev || design.layout === 'cards';
         <div class="eyebrow">02 / Sessions</div>
         <h2 class="display">Three ways <em>to connect.</em></h2>
       </div>
-      <p class="lede">Every session begins with a photo, your animal's name and their species. Not sure where to start? A written reading is a gentle first step.</p>
+      <p class="lede">Animal readings begin with a photo, their name and their species. For channeling, just bring your questions. Not sure where to start? A written reading is a gentle first step.</p>
     </div>
 
     {dev && <DevSwitcher />}
@@ -24,7 +24,7 @@ const showCards = dev || design.layout === 'cards';
       <div class="menu">
         {sessions.map((s) => (
           <div class="menu-row">
-            <img class="menu-moon" src={s.moon} alt="" />
+            <img class="menu-moon" src={s.moon} alt="" width={s.moonSize[0]} height={s.moonSize[1]} />
             <div class="menu-body">
               <h3 class="display">{s.title} <em>{s.titleItalic}</em></h3>
               <div class="menu-meta">{s.forWho} · {s.meta}</div>
@@ -32,7 +32,7 @@ const showCards = dev || design.layout === 'cards';
             </div>
             <div class="menu-price">
               <div class="price">{s.price}</div>
-              <a class={`kb ${design.button}`} href="#book" data-kb>{s.cta}</a>
+              <a class={`kb ${design.button}`} href={`#book-${s.id}`} data-kb data-book={s.id}>{s.cta}</a>
             </div>
           </div>
         ))}
@@ -43,13 +43,13 @@ const showCards = dev || design.layout === 'cards';
       <div class="cards">
         {sessions.map((s) => (
           <article class="card">
-            <img class="card-moon" src={s.moon} alt="" />
+            <img class="card-moon" src={s.moon} alt="" width={s.moonSize[0]} height={s.moonSize[1]} loading="lazy" />
             <h3 class="display">{s.title} <em>{s.titleItalic}</em></h3>
             <div class="menu-meta">{s.forWho}</div>
             <p>{s.text}</p>
             <div class="price">{s.price}</div>
             <div class="card-meta">{s.meta}</div>
-            <a class={`kb ${design.button}`} href="#book" data-kb>{s.cta}</a>
+            <a class={`kb ${design.button}`} href={`#book-${s.id}`} data-kb data-book={s.id}>{s.cta}</a>
           </article>
         ))}
       </div>

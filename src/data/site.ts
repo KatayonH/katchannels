@@ -3,6 +3,8 @@
 export interface Session {
   id: string;
   moon: string;
+  /** Intrinsic size of the moon image, so the page doesn't jump while it loads. */
+  moonSize: [number, number];
   title: string;
   titleItalic: string;
   forWho: string;
@@ -10,12 +12,19 @@ export interface Session {
   text: string;
   price: string;
   cta: string;
+  /** Short tab label in the booking panel. */
+  tab: string;
+  /** Which "You're booked" pop-up to show after paying. */
+  kind: 'animal' | 'channeling';
+  /** Stripe Payment Link (no time slot) or a Cal.com event (pick a time). */
+  booking: { type: 'stripe'; url: string } | { type: 'cal'; calLink: string };
 }
 
 export const sessions: Session[] = [
   {
     id: 'written',
     moon: '/images/moon-written.png',
+    moonSize: [89, 134],
     title: 'Written',
     titleItalic: 'Reading',
     forWho: 'For living or passed animals',
@@ -23,10 +32,14 @@ export const sessions: Session[] = [
     text: 'I write down what your animal shares and send it to your inbox, for an animal beside you or one who has crossed over.',
     price: '$180',
     cta: 'Book written reading',
+    tab: 'Written',
+    kind: 'animal',
+    booking: { type: 'stripe', url: 'https://buy.stripe.com/8x228rf2v72I5LK7zm67S00' },
   },
   {
     id: 'live',
     moon: '/images/moon-live.png',
+    moonSize: [94, 132],
     title: 'Live',
     titleItalic: 'Reading',
     forWho: 'For living or passed animals',
@@ -34,10 +47,14 @@ export const sessions: Session[] = [
     text: 'Talk with me on a live video call as I share what your animal tells me, whether they are with you or have crossed over.',
     price: '$200',
     cta: 'Book live reading',
+    tab: 'Live',
+    kind: 'animal',
+    booking: { type: 'cal', calLink: 'katchannels/live-reading' },
   },
   {
     id: 'channeling',
     moon: '/images/moon-channeling.png',
+    moonSize: [153, 155],
     title: 'Channeling',
     titleItalic: 'Session',
     forWho: 'For you',
@@ -45,6 +62,9 @@ export const sessions: Session[] = [
     text: 'Bring your questions. I connect with your higher self and guides for the answers you seek, and anything that needs to come through for your highest good.',
     price: '$230',
     cta: 'Book channeling',
+    tab: 'Channeling',
+    kind: 'channeling',
+    booking: { type: 'cal', calLink: 'katchannels/channeling' },
   },
 ];
 
@@ -85,8 +105,8 @@ export const faqs = [
   },
   {
     q: 'What is your cancellation policy?',
-    a: 'You can cancel or reschedule up to 48 hours before your session for a full refund or a new time. Within 48 hours, I can move your session once.',
-    draft: true,
+    a: 'Cancel a live session at least 48 hours before it starts and your payment is refunded in full, automatically. Within 48 hours, I can move your session once.',
+    draft: false,
   },
   {
     q: 'Are sessions refundable?',

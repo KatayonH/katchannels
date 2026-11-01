@@ -1,25 +1,193 @@
 ---
+import { sessions } from '../data/site';
+
 const dev = import.meta.env.DEV;
+const first = sessions[0];
 ---
 
 <section class="book" id="book">
-  <img class="bouquet bouquet-left" src="/images/bouquet-left.jpg" alt="" />
-  <img class="bouquet bouquet-right" src="/images/bouquet-right.jpg" alt="" />
+  <img class="bouquet bouquet-left" src="/images/bouquet-left.jpg" alt="" width="1020" height="682" loading="lazy" />
+  <img class="bouquet bouquet-right" src="/images/bouquet-right.jpg" alt="" width="1020" height="682" loading="lazy" />
   <div class="wrap">
-    <img class="divider" src="/images/divider.png" alt="" />
+    <img class="divider" src="/images/divider.png" alt="" width="1181" height="19" loading="lazy" />
     <h2 class="display">Ready <em>to connect?</em></h2>
     <p class="lede">Book your session today. Take your time gathering your photos and questions. After booking, you'll receive a private link to share everything I need before we connect.</p>
 
-    {/* TODO: replace with the Cal.com inline embed (light theme, gold brand color). */}
-    <div class="cal-embed">
-      <div class="eyebrow">Cal.com booking calendar</div>
-      <p>Your Cal.com embed goes here, set to its light theme with gold as the brand color.</p>
-      {dev && (
-        <p>
-          Dev only: preview the after-payment pop-up with
-          <a href="?booked=animal">?booked=animal</a> or <a href="?booked=channeling">?booked=channeling</a>
-        </p>
-      )}
+    <div class="booker">
+      <img class="booker-logo" src="/images/kc-logo.png" alt="" width="195" height="400" />
+      <div class="booker-tabs" role="tablist" aria-label="Choose a session">
+        {sessions.map((s) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${s.id}`}
+            aria-controls={`panel-${s.id}`}
+            aria-selected={String(s.id === first.id)}
+            tabindex={s.id === first.id ? 0 : -1}
+            data-tab={s.id}
+          >
+            <span class="booker-tab-name">{s.tab}</span>
+            <span class="booker-tab-price">{s.price}</span>
+          </button>
+        ))}
+      </div>
+
+      {sessions.map((s) => (
+        <div
+          class="booker-panel"
+          role="tabpanel"
+          id={`panel-${s.id}`}
+          aria-labelledby={`tab-${s.id}`}
+          data-panel={s.id}
+          data-kind={s.kind}
+          hidden={s.id !== first.id}
+        >
+          {s.booking.type === 'stripe' ? (
+            <div class="booker-pay">
+              <img class="booker-moon" src={s.moon} alt="" width={s.moonSize[0]} height={s.moonSize[1]} loading="lazy" />
+              <h3 class="display">{s.title} <em>{s.titleItalic}</em></h3>
+              <div class="menu-meta">{s.forWho} · {s.meta}</div>
+              <p>No time slot needed. Pay securely through Stripe, then send me a photo, your animal's name and their species. Your reading arrives in your inbox within 7 days.</p>
+              <a class="booker-cta" href={s.booking.url}>Pay {s.price} and book</a>
+            </div>
+          ) : (
+            <div class="cal-frame" data-cal-link={s.booking.calLink} data-cal-ns={s.id}>
+              <p class="cal-loading">Loading the calendar…</p>
+            </div>
+          )}
+        </div>
+      ))}
     </div>
+
+    {dev && (
+      <p class="dev-note">
+        Dev only: preview the after-payment pop-up with
+        <a href="?booked=animal">?booked=animal</a> or <a href="?booked=channeling">?booked=channeling</a>
+      </p>
+    )}
   </div>
 </section>
+
+<script>
+  type CalFn = ((...args: unknown[]) => void) & { ns: Record<string, (...args: unknown[]) => void>; loaded?: boolean; q?: unknown[] };
+  declare global { interface Window { Cal?: CalFn } }
+
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-tab]'));
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-panel]'));
+  const started = new Set<string>();
+  let bookVisible = false;
+
+  // Cal.com's official embed loader, trimmed. Loads embed.js once and queues calls until it's ready.
+  function loadCal() {
+    if (window.Cal) return;
+    (function (C: any, A: string, L: string) {
+      const p = (a: any, ar: any) => a.q.push(ar);
+      const d = C.document;
+      C.Cal = C.Cal || function () {
+        const cal = C.Cal;
+        const ar = arguments;
+        if (!cal.loaded) {
+          cal.ns = {};
+          cal.q = cal.q || [];
+          d.head.appendChild(d.createElement('script')).src = A;
+          cal.loaded = true;
+        }
+        if (ar[0] === L) {
+          const api: any = function () { p(api, arguments); };
+          const namespace = ar[1];
+          api.q = api.q || [];
+          if (typeof namespace === 'string') {
+            cal.ns[namespace] = cal.ns[namespace] || api;
+            p(cal.ns[namespace], ar);
+            p(cal, ['initNamespace', namespace]);
+          } else p(cal, ar);
+          return;
+        }
+        p(cal, ar);
+      };
+    })(window, 'https://app.cal.com/embed/embed.js', 'init');
+  }
+
+  function startCalendar(panel: HTMLElement) {
+    const frame = panel.querySelector<HTMLElement>('[data-cal-link]');
+    if (!frame) return;
+    const ns = frame.dataset.calNs!;
+    if (started.has(ns)) return;
+    started.add(ns);
+    loadCal();
+    const Cal = window.Cal!;
+    Cal('init', ns, { origin: 'https://cal.com' });
+    const api = Cal.ns[ns];
+    frame.id = `cal-${ns}`;
+    api('inline', {
+      elementOrSelector: `#cal-${ns}`,
+      calLink: frame.dataset.calLink,
+      config: { layout: 'month_view', theme: 'light' },
+    });
+    api('ui', {
+      theme: 'light',
+      cssVarsPerTheme: { light: { 'cal-brand': '#C5A36B', 'cal-bg': '#F3EBDD', 'cal-bg-muted': '#EDE3D2', 'cal-border': '#E2D6C2', 'cal-border-subtle': '#E2D6C2' } },
+      hideEventTypeDetails: false,
+      layout: 'month_view',
+    });
+    // When a booking (and its payment) goes through, open the "You're booked" pop-up.
+    api('on', {
+      action: 'bookingSuccessfulV2',
+      callback: () => {
+        window.dispatchEvent(new CustomEvent('kc:booked', { detail: panel.dataset.kind }));
+      },
+    });
+    frame.querySelector('.cal-loading')?.remove();
+  }
+
+  function select(id: string, focus = false) {
+    tabs.forEach((t) => {
+      const on = t.dataset.tab === id;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      if (on && focus) t.focus();
+    });
+    panels.forEach((p) => {
+      const on = p.dataset.panel === id;
+      p.hidden = !on;
+      if (on && bookVisible) startCalendar(p);
+    });
+  }
+
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t.dataset.tab!));
+    t.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+      select(next.dataset.tab!, true);
+    });
+  });
+
+  // Session "Book" buttons elsewhere on the page jump here with their tab selected.
+  document.querySelectorAll<HTMLAnchorElement>('[data-book]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      select(a.dataset.book!);
+      document.getElementById('book')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // Only load Cal.com once the booking section is close to the screen, so it doesn't slow the first page load.
+  const book = document.getElementById('book');
+  if (book) {
+    new IntersectionObserver((entries, obs) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      bookVisible = true;
+      const open = panels.find((p) => !p.hidden);
+      if (open) startCalendar(open);
+      obs.disconnect();
+    }, { rootMargin: '600px 0px' }).observe(book);
+  }
+
+  // Support links like katchannels.com/#book-live
+  const fromHash = location.hash.match(/^#book-(\w+)/);
+  if (fromHash && tabs.some((t) => t.dataset.tab === fromHash[1])) {
+    select(fromHash[1]);
+    document.getElementById('book')?.scrollIntoView();
+  }
+</script>

@@ -1,6 +1,7 @@
 ---
-// After-payment pop-up. Opens when the page loads with ?booked=animal or ?booked=channeling.
-// Point each Cal.com event type's success redirect at https://katchannels.com/?booked=animal (or =channeling).
+// After-payment pop-up.
+// - Cal.com bookings: opened by the 'kc:booked' event fired from the booking panel (Book.astro).
+// - Stripe Payment Link (Written Reading): Stripe redirects to https://katchannels.com/?booked=animal after payment.
 ---
 <dialog class="booked" id="booked" aria-labelledby="booked-title">
   <button type="button" class="booked-close" aria-label="Close" data-close>
@@ -38,12 +39,17 @@
 
 <script>
   const dialog = document.getElementById('booked') as HTMLDialogElement | null;
-  const kind = new URLSearchParams(location.search).get('booked');
 
-  if (dialog && (kind === 'animal' || kind === 'channeling')) {
-    dialog.querySelector<HTMLElement>(`[data-kind="${kind}"]`)?.removeAttribute('hidden');
-    dialog.showModal();
+  function openBooked(kind: unknown) {
+    if (!dialog || (kind !== 'animal' && kind !== 'channeling')) return;
+    dialog.querySelectorAll<HTMLElement>('[data-kind]').forEach((el) => {
+      el.hidden = el.dataset.kind !== kind;
+    });
+    if (!dialog.open) dialog.showModal();
   }
+
+  openBooked(new URLSearchParams(location.search).get('booked'));
+  window.addEventListener('kc:booked', (e) => openBooked((e as CustomEvent).detail));
 
   dialog?.querySelector('[data-close]')?.addEventListener('click', () => dialog.close());
   dialog?.addEventListener('click', (e) => {
