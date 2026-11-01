@@ -1,0 +1,26 @@
+---
+import { steps } from '../data/site';
+---
+
+<section class="process on-cream" id="process">
+  <img class="process-paper" src="/images/paper.jpg" alt="" />
+  <img class="process-marble" src="/images/marble-corners.png" alt="" />
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">03 / The Process</div>
+        <h2 class="display">What to <em>expect.</em></h2>
+      </div>
+      <p class="lede">Three simple steps, from booking to your message.</p>
+    </div>
+    <ol class="steps">
+      {steps.map((t, i) => (
+        <li class="step">
+          <img class="step-icon" src={t.icon} alt={`Step ${i + 1}`} width="60" height="60" />
+          <h3 class="display">{t.title}</h3>
+          <p>{t.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

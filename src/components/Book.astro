@@ -1,0 +1,25 @@
+---
+const dev = import.meta.env.DEV;
+---
+
+<section class="book" id="book">
+  <img class="bouquet bouquet-left" src="/images/bouquet-left.jpg" alt="" />
+  <img class="bouquet bouquet-right" src="/images/bouquet-right.jpg" alt="" />
+  <div class="wrap">
+    <img class="divider" src="/images/divider.png" alt="" />
+    <h2 class="display">Ready <em>to connect?</em></h2>
+    <p class="lede">Book your session today. Take your time gathering your photos and questions. After booking, you'll receive a private link to share everything I need before we connect.</p>
+
+    {/* TODO: replace with the Cal.com inline embed (light theme, gold brand color). */}
+    <div class="cal-embed">
+      <div class="eyebrow">Cal.com booking calendar</div>
+      <p>Your Cal.com embed goes here, set to its light theme with gold as the brand color.</p>
+      {dev && (
+        <p>
+          Dev only: preview the after-payment pop-up with
+          <a href="?booked=animal">?booked=animal</a> or <a href="?booked=channeling">?booked=channeling</a>
+        </p>
+      )}
+    </div>
+  </div>
+</section>

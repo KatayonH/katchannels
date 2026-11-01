@@ -1,0 +1,26 @@
+---
+import { faqs } from '../data/site';
+
+const dev = import.meta.env.DEV;
+---
+
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">04 / FAQ</div>
+        <h2 class="display">Good <em>to know.</em></h2>
+      </div>
+    </div>
+    <div class="faq-list">
+      {faqs.map((f, i) => (
+        <details class="faq-item" name="faq" open={i === 0}>
+          <summary>
+            <span>{f.q}{dev && f.draft && <span class="draft-badge">DRAFT</span>}</span>
+          </summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
