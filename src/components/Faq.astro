@@ -26,7 +26,7 @@ import { faqGroups, CONTACT_EMAIL } from '../data/site';
           </button>
         ))}
         <button type="button" role="tab" class="faq-topic" id="faq-tab-contact" aria-controls="faq-panel-contact" aria-selected="false" tabindex="-1">
-          <span>More questions</span>
+          <span>Send me a message</span>
           <svg class="faq-topic-chev" width="9" height="15" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 1l6.5 6.5L1 14"></path></svg>
         </button>
       </div>
@@ -119,7 +119,7 @@ import { faqGroups, CONTACT_EMAIL } from '../data/site';
     });
     if (focus) tab.focus();
   };
-  // "Send me a message" at the end of each topic opens the More questions tab.
+  // "Send me a message" at the end of each topic opens the Send me a message tab.
   const contactTab = document.getElementById('faq-tab-contact') as HTMLButtonElement | null;
   document.querySelectorAll<HTMLButtonElement>('[data-open-contact]').forEach((b) =>
     b.addEventListener('click', () => {
