@@ -20,11 +20,12 @@ import { sessions, design } from '../data/site';
             <h3 class="display">{s.title} <em>{s.titleItalic}</em></h3>
             <div class="menu-meta">{s.forWho} · {s.meta}</div>
             <p>{s.text}</p>
+            {s.extra && <div class="price-extra price-extra-m">{s.extra}</div>}
           </div>
           <div class="menu-price">
             <div class="price">{s.price}</div>
-            {s.extra && <div class="price-extra">{s.extra}</div>}
-            <a class={`kb ${design.button}`} href={`#book-${s.id}`} data-kb data-book={s.id}>{s.cta}</a>
+            {s.extra && <div class="price-extra price-extra-d">{s.extra}</div>}
+            <a class={`kb ${design.button}`} href={`#book-${s.id}`} data-kb data-book={s.id} aria-label={s.cta}><span class="cta-long">{s.cta}</span><span class="cta-short" aria-hidden="true">Book</span></a>
           </div>
         </div>
       ))}
