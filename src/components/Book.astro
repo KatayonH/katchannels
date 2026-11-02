@@ -42,15 +42,19 @@ const first = sessions[0];
           hidden={s.id !== first.id}
         >
           {s.options && (
-            <div class="animal-count" role="radiogroup" aria-label="How many animals?">
-              <span class="animal-count-label">How many animals?</span>
-              {s.options.map((o) => (
-                <button type="button" role="radio" aria-checked={String(o.count === 1)} data-count={o.count}>
-                  <span class="animal-count-num">{o.count}</span>
-                  <span class="animal-count-price">{o.price}</span>
-                  {o.length && <span class="animal-count-length">{o.length}</span>}
-                </button>
-              ))}
+            <div class="animal-count">
+              <span class="animal-count-label" id={`count-label-${s.id}`}>How many animals?</span>
+              <div class="animal-count-pills" role="radiogroup" aria-labelledby={`count-label-${s.id}`}>
+                {s.options.map((o) => {
+                  const details = [o.count === 1 ? '1 animal' : `${o.count} animals`, o.length].filter(Boolean).join(' · ');
+                  return (
+                    <button type="button" role="radio" aria-checked={String(o.count === 1)} data-count={o.count} data-price={o.price} data-details={details}>
+                      {o.count === 1 ? '1 animal' : `${o.count} animals`}
+                    </button>
+                  );
+                })}
+              </div>
+              <p class="animal-count-sum" aria-live="polite"><strong>{s.options[0].price}</strong> <span>{['1 animal', s.options[0].length].filter(Boolean).join(' · ')}</span></p>
             </div>
           )}
           {(s.options ?? [{ count: 1, price: s.price, booking: s.booking }]).map((o) => (
@@ -146,6 +150,22 @@ const first = sessions[0];
       hideEventTypeDetails: false,
       layout: 'month_view',
     });
+    // Keep "Loading the calendar…" showing until Cal.com says the calendar is ready.
+    // If it fails, or is still not ready after 10 seconds, offer a direct link instead.
+    const loading = frame.querySelector<HTMLElement>('.cal-loading');
+    const showFallback = () => {
+      if (!loading) return;
+      loading.textContent = 'Having trouble seeing the calendar? ';
+      const link = document.createElement('a');
+      link.href = `https://cal.com/${frame.dataset.calLink}`;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = 'Book here instead';
+      loading.append(link, '.');
+    };
+    const slow = window.setTimeout(showFallback, 10000);
+    api('on', { action: 'linkReady', callback: () => { window.clearTimeout(slow); loading?.remove(); } });
+    api('on', { action: 'linkFailed', callback: () => { window.clearTimeout(slow); showFallback(); } });
     // When a booking (and its payment) goes through, open the "You're booked" pop-up.
     api('on', {
       action: 'bookingSuccessfulV2',
@@ -153,7 +173,6 @@ const first = sessions[0];
         window.dispatchEvent(new CustomEvent('kc:booked', { detail: panel.dataset.kind }));
       },
     });
-    frame.querySelector('.cal-loading')?.remove();
   }
 
   function select(id: string, focus = false) {
@@ -191,6 +210,10 @@ const first = sessions[0];
           if (on && focus) c.focus();
         });
         panel.querySelectorAll<HTMLElement>('[data-option]').forEach((o) => { o.hidden = o.dataset.option !== b.dataset.count; });
+        const sumPrice = panel.querySelector<HTMLElement>('.animal-count-sum strong');
+        const sumDetails = panel.querySelector<HTMLElement>('.animal-count-sum span');
+        if (sumPrice && b.dataset.price) sumPrice.textContent = b.dataset.price;
+        if (sumDetails && b.dataset.details) sumDetails.textContent = b.dataset.details;
         if (bookVisible) startCalendar(panel);
       };
       btn.tabIndex = btn.getAttribute('aria-checked') === 'true' ? 0 : -1;

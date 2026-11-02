@@ -105,7 +105,7 @@ export const steps = [
   {
     icon: '/images/step-2.png',
     title: 'Send three things',
-    text: "For each animal, a photo, their name and their species. That's all I need. Please leave out their history and symptoms so the reading stays clear. For a channeling session, have your questions ready.",
+    text: "For each animal, a photo, their name and their species. For channeling, just bring your questions.",
   },
   {
     icon: '/images/step-3.png',

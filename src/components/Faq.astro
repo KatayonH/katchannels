@@ -3,29 +3,77 @@ import { faqGroups, CONTACT_EMAIL } from '../data/site';
 ---
 
 <section class="faq" id="faq">
-  <div class="wrap faq-layout">
+  <div class="wrap faq-wrap">
     <div class="faq-intro">
       <div class="eyebrow">04 / FAQ</div>
       <h2 class="display">Good <em>to know.</em></h2>
-      <p class="lede">Still wondering about something? Email me at <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> and I'll get back to you.</p>
     </div>
-    <div class="faq-groups">
-      {faqGroups.map((g, gi) => (
-        <div class="faq-group">
-          <h3 class="faq-group-title">{g.title}</h3>
-          <div class="faq-list">
-            {g.items.map((f, i) => (
-              <details class="faq-item" name="faq" open={gi === 0 && i === 0}>
-                <summary>
-                  <span class="faq-q">{f.q}</span>
-                  <span class="faq-mark" aria-hidden="true"></span>
-                </summary>
-                <p>{f.a}</p>
-              </details>
-            ))}
+
+    <div class="faq-layout">
+      <div class="faq-topics" role="tablist" aria-label="Question topics">
+        {faqGroups.map((g, gi) => (
+          <button
+            type="button"
+            role="tab"
+            class="faq-topic"
+            id={`faq-tab-${gi}`}
+            aria-controls={`faq-panel-${gi}`}
+            aria-selected={String(gi === 0)}
+            tabindex={gi === 0 ? 0 : -1}
+          >
+            <span>{g.title}</span>
+            <svg class="faq-topic-chev" width="9" height="15" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 1l6.5 6.5L1 14"></path></svg>
+          </button>
+        ))}
+      </div>
+
+      <div class="faq-panels">
+        {faqGroups.map((g, gi) => (
+          <div class="faq-panel" role="tabpanel" id={`faq-panel-${gi}`} aria-labelledby={`faq-tab-${gi}`} hidden={gi !== 0}>
+            <h3 class="faq-panel-title">{g.title}</h3>
+            <div class="faq-list">
+              {g.items.map((f, i) => (
+                <details class="faq-item" name={`faq-${gi}`} open={i === 0}>
+                  <summary>
+                    <span class="faq-q">{f.q}</span>
+                    <svg class="faq-chev" width="15" height="9" viewBox="0 0 15 9" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 1l6.5 6.5L14 1"></path></svg>
+                  </summary>
+                  <p>{f.a}</p>
+                </details>
+              ))}
+            </div>
           </div>
+        ))}
+        <div class="faq-contact">
+          <p class="faq-contact-title">Still have a question?</p>
+          <p class="faq-contact-text">Email me and I'll get back to you.</p>
+          <a class="faq-contact-btn" href={`mailto:${CONTACT_EMAIL}`}>Email Kat</a>
         </div>
-      ))}
+      </div>
     </div>
   </div>
 </section>
+
+<script>
+  // Topic menu: click or use the arrow keys to switch which group of questions shows.
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.faq-topic'));
+  const show = (tab: HTMLButtonElement, focus = false) => {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      const panel = document.getElementById(t.getAttribute('aria-controls')!);
+      if (panel) panel.hidden = !on;
+    });
+    if (focus) tab.focus();
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => show(t));
+    t.addEventListener('keydown', (e) => {
+      const next = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+      if (!next) return;
+      e.preventDefault();
+      show(tabs[(i + next + tabs.length) % tabs.length], true);
+    });
+  });
+</script>
