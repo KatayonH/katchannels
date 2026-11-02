@@ -170,7 +170,9 @@ const first = sessions[0];
     api('on', {
       action: 'bookingSuccessfulV2',
       callback: () => {
-        window.dispatchEvent(new CustomEvent('kc:booked', { detail: panel.dataset.kind }));
+        // Tell the pop-up what was booked, so the intake form link matches what they paid for.
+        const animals = Number(frame.closest<HTMLElement>('[data-option]')?.dataset.option || 1);
+        window.dispatchEvent(new CustomEvent('kc:booked', { detail: { kind: panel.dataset.kind, animals, session: panel.dataset.panel } }));
       },
     });
   }

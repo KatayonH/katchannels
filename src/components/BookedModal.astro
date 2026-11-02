@@ -1,7 +1,8 @@
 ---
 // After-payment pop-up.
 // - Cal.com bookings: opened by the 'kc:booked' event fired from the booking panel (Book.astro).
-// - Stripe Payment Link (Written Reading): Stripe redirects to https://katchannels.com/?booked=animal after payment.
+// - Stripe Payment Links (Written Reading): Stripe redirects to https://katchannels.com/?booked=animal&animals=N&session=written after payment.
+// The intake form link carries the number of animals paid for, so the form only shows that many animal sections.
 import { INTAKE_FORM_URL } from '../data/site';
 ---
 <dialog class="booked" id="booked" aria-labelledby="booked-title">
@@ -23,7 +24,7 @@ import { INTAKE_FORM_URL } from '../data/site';
         </ul>
         <p>If there's anything you'd like me to ask them, add that too. Please leave out their history and symptoms so the reading stays clear.</p>
       </div>
-      <a class="kb kb-glass" href={INTAKE_FORM_URL} target="_blank" rel="noopener" style="align-self: flex-start; margin: 18px 0">Share your animal's details</a>
+      <a class="kb kb-glass" data-intake href={INTAKE_FORM_URL} data-base={INTAKE_FORM_URL} target="_blank" rel="noopener" style="align-self: flex-start; margin: 18px 0">Share your animal's details</a>
       <p class="small">Bookmark this link so you can come back to it anytime before our session.</p>
     </div>
 
@@ -40,16 +41,25 @@ import { INTAKE_FORM_URL } from '../data/site';
 <script>
   const dialog = document.getElementById('booked') as HTMLDialogElement | null;
 
-  function openBooked(kind: unknown) {
+  function openBooked(kind: unknown, animals: unknown = 1, session: unknown = 'written') {
     if (!dialog || (kind !== 'animal' && kind !== 'channeling')) return;
+    // Point the intake form at the number of animals actually paid for (1 to 3).
+    const n = Math.min(3, Math.max(1, Math.round(Number(animals)) || 1));
+    const s = session === 'live' ? 'live' : 'written';
+    const intake = dialog.querySelector<HTMLAnchorElement>('[data-intake]');
+    if (intake) intake.href = `${intake.dataset.base}?animals=${n}&session=${s}`;
     dialog.querySelectorAll<HTMLElement>('[data-kind]').forEach((el) => {
       el.hidden = el.dataset.kind !== kind;
     });
     if (!dialog.open) dialog.showModal();
   }
 
-  openBooked(new URLSearchParams(location.search).get('booked'));
-  window.addEventListener('kc:booked', (e) => openBooked((e as CustomEvent).detail));
+  const params = new URLSearchParams(location.search);
+  openBooked(params.get('booked'), params.get('animals'), params.get('session'));
+  window.addEventListener('kc:booked', (e) => {
+    const d = (e as CustomEvent).detail || {};
+    openBooked(d.kind, d.animals, d.session);
+  });
 
   dialog?.querySelector('[data-close]')?.addEventListener('click', () => dialog.close());
   dialog?.addEventListener('click', (e) => {
