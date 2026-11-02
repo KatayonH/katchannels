@@ -369,12 +369,46 @@ a:hover { color: var(--gold-light); }
 .faq-item[open] .faq-chev { transform: rotate(180deg); }
 .faq-item p { margin: 0; padding: 0 20px 24px; max-width: 680px; font-size: 16px; line-height: 1.75; color: rgba(243, 235, 221, 0.85); }
 
-/* "Still have a question?" box at the end of the questions */
-.faq-contact { margin-top: 40px; padding: 28px 28px 30px; border: 1px solid rgba(217, 162, 74, 0.35); border-radius: 10px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
-.faq-contact-title { margin: 0; font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 26px; }
-.faq-contact-text { margin: 0 0 14px; font-size: 16px; color: rgba(243, 235, 221, 0.82); }
+/* "Send me a message" line at the end of each topic */
+.faq-more { margin: 28px 0 0; padding-left: 20px; font-size: 16px; color: rgba(243, 235, 221, 0.75); }
+.faq-more-link { padding: 0; font: inherit; color: var(--gold-light); background: none; border: none; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.faq-more-link:hover { color: var(--ivory); }
+
+/* More questions: a centred contact form */
+.faq-contact { max-width: 600px; margin: 0 auto; text-align: center; scroll-margin-top: 24px; }
+.faq-contact-title { margin-bottom: 10px; }
+.faq-contact-text { margin: 0 0 26px; font-size: 16px; color: rgba(243, 235, 221, 0.82); }
+.faq-contact .contact-form { text-align: left; align-items: stretch; }
+.faq-contact .contact-form > button { align-self: center; }
 .faq-contact-btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 24px; font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none; color: var(--champagne); border: 1px solid rgba(235, 194, 122, 0.55); border-radius: 999px; transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; }
 .faq-contact-btn:hover { color: var(--navy); background-color: var(--champagne); border-color: var(--champagne); }
+.faq-contact-btn { font-family: var(--sans); background: transparent; cursor: pointer; }
+.faq-contact-btn:disabled { opacity: 0.6; cursor: default; }
+.contact-form { width: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+.contact-row { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.contact-field { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+.contact-field span { font-size: 11px; font-weight: 400; letter-spacing: 0.22em; text-transform: uppercase; color: var(--champagne); }
+.contact-field input, .contact-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 14px;
+  font-family: var(--sans);
+  font-size: 16px;
+  color: var(--ivory);
+  background: rgba(243, 235, 221, 0.04);
+  border: 1px solid rgba(217, 162, 74, 0.35);
+  border-radius: 6px;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+.contact-field textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+.contact-field input:focus, .contact-field textarea:focus { outline: none; border-color: var(--gold-light); background: rgba(243, 235, 221, 0.07); }
+.contact-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.contact-status { margin: 0; font-size: 15px; line-height: 1.6; color: var(--champagne); }
+.contact-status:empty { display: none; }
+.contact-form.is-sent .contact-row, .contact-form.is-sent > .contact-field, .contact-form.is-sent > button { display: none; }
+.contact-form.is-sent .contact-status { font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--ivory); }
+.contact-alt { margin: 18px 0 0; font-size: 14px; color: rgba(243, 235, 221, 0.65); }
+.contact-alt a { color: var(--gold-light); }
 
 /* ---------- Book ---------- */
 .book { position: relative; overflow: hidden; background: var(--navy); }
@@ -569,15 +603,16 @@ a:hover { color: var(--gold-light); }
   /* FAQ on phones: topics become two tabs side by side above the questions */
   .faq-wrap { padding-block: 72px; gap: 36px; }
   .faq-layout { grid-template-columns: minmax(0, 1fr); gap: 28px; }
-  .faq-topics { flex-direction: row; padding-right: 0; border-bottom: 1px solid rgba(217, 162, 74, 0.25); }
-  .faq-topic { flex: 1; justify-content: center; padding: 14px 6px; font-size: 19px; text-align: center; border-bottom: none; }
-  .faq-topic[aria-selected='true'] > span::before { width: 18px; height: 18px; }
-  .faq-topic-chev { display: none; }
+  .faq-topics { padding-right: 0; }
+  .faq-topic { padding: 16px 4px; font-size: 21px; }
+  .faq-topic[aria-selected='true'] > span::before { width: 20px; height: 20px; }
   .faq-panels { padding-left: 0; border-left: none; }
   .faq-panel-title { font-size: 32px; margin-bottom: 14px; }
-  .faq-contact { align-items: center; text-align: center; padding: 26px 20px; }
+  .contact-row { grid-template-columns: minmax(0, 1fr); }
+  .contact-form > button { width: 100%; justify-content: center; }
   .faq-item summary { padding: 20px 12px; }
   .faq-item p { padding: 0 12px 22px; }
+  .faq-more { padding-left: 12px; }
   .steps { grid-template-columns: minmax(0, 1fr); }
   .step + .step { border-left: none; border-top: 1px solid var(--rule-antique); padding-top: 28px; }
   .bouquet { width: 44vw; opacity: 0.6; }

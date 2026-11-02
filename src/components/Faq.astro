@@ -25,6 +25,10 @@ import { faqGroups, CONTACT_EMAIL } from '../data/site';
             <svg class="faq-topic-chev" width="9" height="15" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 1l6.5 6.5L1 14"></path></svg>
           </button>
         ))}
+        <button type="button" role="tab" class="faq-topic" id="faq-tab-contact" aria-controls="faq-panel-contact" aria-selected="false" tabindex="-1">
+          <span>More questions</span>
+          <svg class="faq-topic-chev" width="9" height="15" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 1l6.5 6.5L1 14"></path></svg>
+        </button>
       </div>
 
       <div class="faq-panels">
@@ -42,17 +46,63 @@ import { faqGroups, CONTACT_EMAIL } from '../data/site';
                 </details>
               ))}
             </div>
+            <p class="faq-more">Still have a question? <button type="button" class="faq-more-link" data-open-contact>Send me a message</button></p>
           </div>
         ))}
-        <div class="faq-contact">
-          <p class="faq-contact-title">Still have a question?</p>
-          <p class="faq-contact-text">Email me and I'll get back to you.</p>
-          <a class="faq-contact-btn" href={`mailto:${CONTACT_EMAIL}`}>Email Kat</a>
+        <div class="faq-panel faq-contact" role="tabpanel" id="faq-panel-contact" aria-labelledby="faq-tab-contact" hidden>
+          <h3 class="faq-panel-title faq-contact-title">Still have a question?</h3>
+          <p class="faq-contact-text">Send me a message and I'll get back to you.</p>
+          <!-- Netlify Forms picks this form up when the site is published and emails each message to Kat. -->
+          <form class="contact-form" name="contact" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="contact" />
+            <p class="contact-trap" aria-hidden="true"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+            <div class="contact-row">
+              <label class="contact-field">
+                <span>Name</span>
+                <input type="text" name="name" autocomplete="name" required />
+              </label>
+              <label class="contact-field">
+                <span>Email</span>
+                <input type="email" name="email" autocomplete="email" required />
+              </label>
+            </div>
+            <label class="contact-field">
+              <span>Message</span>
+              <textarea name="message" rows="5" required></textarea>
+            </label>
+            <button class="faq-contact-btn" type="submit">Send message</button>
+            <p class="contact-status" role="status" aria-live="polite"></p>
+          </form>
+          <p class="contact-alt">Or email me at <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  // Contact form: send the message without leaving the page, then say thank you.
+  const form = document.querySelector<HTMLFormElement>('.contact-form');
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const status = form.querySelector<HTMLElement>('.contact-status')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    button.disabled = true;
+    status.textContent = 'Sending…';
+    try {
+      const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString();
+      const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+      if (!res.ok) throw new Error(String(res.status));
+      form.reset();
+      form.classList.add('is-sent');
+      status.textContent = "Thank you. Your message is on its way, and I'll get back to you soon.";
+    } catch {
+      status.textContent = "Sorry, that didn't send. Please email me at hello@katchannels.com instead.";
+    } finally {
+      button.disabled = false;
+    }
+  });
+</script>
 
 <script>
   // Topic menu: click or use the arrow keys to switch which group of questions shows.
@@ -67,6 +117,16 @@ import { faqGroups, CONTACT_EMAIL } from '../data/site';
     });
     if (focus) tab.focus();
   };
+  // "Send me a message" at the end of each topic opens the More questions tab.
+  const contactTab = document.getElementById('faq-tab-contact') as HTMLButtonElement | null;
+  document.querySelectorAll<HTMLButtonElement>('[data-open-contact]').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (!contactTab) return;
+      show(contactTab);
+      document.getElementById('faq-panel-contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.querySelector<HTMLInputElement>('.contact-form [name="name"]')?.focus({ preventScroll: true });
+    }),
+  );
   tabs.forEach((t, i) => {
     t.addEventListener('click', () => show(t));
     t.addEventListener('keydown', (e) => {
