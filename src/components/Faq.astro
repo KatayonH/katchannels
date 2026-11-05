@@ -11,6 +11,10 @@ import { faqGroups, CONTACT_EMAIL } from '../data/site';
 
     <div class="faq-layout">
       <div class="faq-topics" role="tablist" aria-label="Question topics">
+        <button type="button" role="tab" class="faq-topic" id="faq-tab-contact" aria-controls="faq-panel-contact" aria-selected="true" tabindex="0">
+          <span>Send me a message</span>
+          <svg class="faq-topic-chev" width="9" height="15" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 1l6.5 6.5L1 14"></path></svg>
+        </button>
         {faqGroups.map((g, gi) => (
           <button
             type="button"
@@ -18,22 +22,18 @@ import { faqGroups, CONTACT_EMAIL } from '../data/site';
             class="faq-topic"
             id={`faq-tab-${gi}`}
             aria-controls={`faq-panel-${gi}`}
-            aria-selected={String(gi === 0)}
-            tabindex={gi === 0 ? 0 : -1}
+            aria-selected="false"
+            tabindex="-1"
           >
             <span>{g.title}</span>
             <svg class="faq-topic-chev" width="9" height="15" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 1l6.5 6.5L1 14"></path></svg>
           </button>
         ))}
-        <button type="button" role="tab" class="faq-topic" id="faq-tab-contact" aria-controls="faq-panel-contact" aria-selected="false" tabindex="-1">
-          <span>Send me a message</span>
-          <svg class="faq-topic-chev" width="9" height="15" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 1l6.5 6.5L1 14"></path></svg>
-        </button>
       </div>
 
       <div class="faq-panels">
         {faqGroups.map((g, gi) => (
-          <div class="faq-panel" role="tabpanel" id={`faq-panel-${gi}`} aria-labelledby={`faq-tab-${gi}`} hidden={gi !== 0}>
+          <div class="faq-panel" role="tabpanel" id={`faq-panel-${gi}`} aria-labelledby={`faq-tab-${gi}`} hidden>
             <h3 class="faq-panel-title">{g.title}</h3>
             <div class="faq-list">
               {g.items.map((f, i) => (
@@ -49,7 +49,7 @@ import { faqGroups, CONTACT_EMAIL } from '../data/site';
             <p class="faq-more">Still have a question? <button type="button" class="faq-more-link" data-open-contact>Send me a message</button></p>
           </div>
         ))}
-        <div class="faq-panel faq-contact" role="tabpanel" id="faq-panel-contact" aria-labelledby="faq-tab-contact" hidden>
+        <div class="faq-panel faq-contact" role="tabpanel" id="faq-panel-contact" aria-labelledby="faq-tab-contact">
           <h3 class="faq-panel-title faq-contact-title">Still have a question?</h3>
           <p class="faq-contact-text">Send me a message and I'll get back to you.</p>
           <!-- Messages are sent by Web3Forms straight to Kat's inbox. The access key only says where to deliver; it is not a secret. -->

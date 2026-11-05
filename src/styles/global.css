@@ -111,6 +111,7 @@ a:hover { color: var(--gold-light); }
   transition: background-color 0.35s ease, color 0.35s ease;
 }
 .nav-book { gap: 0; white-space: pre; }
+.nav .btn-outline { padding: 10px 16px; }
 .btn-outline:hover { background-color: rgba(217, 162, 74, 0.1); color: var(--gold-light); }
 
 /* ---------- Hero ---------- */
@@ -621,7 +622,7 @@ a:hover { color: var(--gold-light); }
   .nav .wrap { flex-wrap: nowrap; padding-block: 12px; }
   .brand-word { height: 12px; }
   .brand-logo { height: 36px; }
-  .nav .btn-outline { padding: 12px 16px; font-size: 10px; min-height: 44px; white-space: nowrap; }
+  .nav .btn-outline { padding: 10px 14px; font-size: 10px; min-height: 44px; white-space: nowrap; }
   .brand { flex-shrink: 1; min-width: 0; }
   .nav-toggle {
     display: grid;
