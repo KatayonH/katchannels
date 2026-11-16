@@ -166,10 +166,15 @@ const first = sessions[0];
     const slow = window.setTimeout(showFallback, 10000);
     api('on', { action: 'linkReady', callback: () => { window.clearTimeout(slow); loading?.remove(); } });
     api('on', { action: 'linkFailed', callback: () => { window.clearTimeout(slow); showFallback(); } });
-    // When a booking (and its payment) goes through, open the "You're booked" pop-up.
+    // When a booking goes through with nothing left to pay, open the "You're booked" pop-up.
     api('on', {
       action: 'bookingSuccessfulV2',
-      callback: () => {
+      callback: (e: unknown) => {
+        // Cal.com fires this as soon as the booking is created, before payment for paid sessions.
+        // If payment is still needed, don't show the pop-up: the intake link arrives in the
+        // Cal.com confirmation email once they've paid.
+        const data = (e as { detail?: { data?: { paymentRequired?: boolean } } })?.detail?.data;
+        if (data?.paymentRequired) return;
         // Tell the pop-up what was booked, so the intake form link matches what they paid for.
         const animals = Number(frame.closest<HTMLElement>('[data-option]')?.dataset.option || 1);
         window.dispatchEvent(new CustomEvent('kc:booked', { detail: { kind: panel.dataset.kind, animals, session: panel.dataset.panel } }));
