@@ -10,6 +10,7 @@ const {
   title = 'Kat Channels | Animal Communication and Channeling',
   description = 'Animal communication readings and channeling sessions with Kat. Written or live readings, online, for you and the animals you love.',
 } = Astro.props;
+import { UMAMI_WEBSITE_ID } from '../data/site';
 ---
 
 <!doctype html>
@@ -36,9 +37,12 @@ const {
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap"
     />
-    <!-- Visitor counts (GoatCounter: no cookies, no personal data) -->
-    <script is:inline data-goatcounter="https://katchannels.goatcounter.com/count"
-            async src="//gc.zgo.at/count.js"></script>
+    <!-- Visitor counts: Umami Cloud once its website ID is set, GoatCounter until then. Neither uses cookies or personal data. -->
+    {UMAMI_WEBSITE_ID ? (
+      <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id={UMAMI_WEBSITE_ID}></script>
+    ) : (
+      <script is:inline data-goatcounter="https://katchannels.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    )}
   </head>
   <body>
     <slot />

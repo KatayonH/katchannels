@@ -208,3 +208,7 @@ export const buttonStyles = [
   { label: '11 Solid ivory', cls: 'kb-ivory' },
   { label: '12 Gold outline', cls: 'kb-outline' },
 ];
+
+// Umami Cloud website ID (Umami > Settings > Websites > Edit > Website ID).
+// While this is empty the site keeps using GoatCounter, so visits are never left uncounted.
+export const UMAMI_WEBSITE_ID = '';
