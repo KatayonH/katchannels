@@ -17,6 +17,7 @@
   --sans: 'Jost', Arial, sans-serif;
   --wrap: 1240px;
   --gutter: max(20px, 4vw);
+  --radius: 6px; /* buttons match the form input boxes */
 }
 
 /* ---------- Base ---------- */
@@ -108,6 +109,7 @@ a:hover { color: var(--gold-light); }
   color: var(--gold);
   border: 1px solid var(--gold);
   padding: 13px 20px;
+  border-radius: var(--radius);
   transition: background-color 0.35s ease, color 0.35s ease;
 }
 .nav-book { gap: 0; white-space: pre; }
@@ -290,7 +292,7 @@ a:hover { color: var(--gold-light); }
 .kb-ivory { color: var(--navy); background-color: var(--champagne); border-radius: 2px; padding: 12px 22px; }
 .kb-ivory:hover { color: var(--navy); background-color: #f8eeda; }
 /* Matches the gold outline buttons in the nav and hero (.btn-outline). */
-.kb-outline { color: var(--gold); border: 1px solid var(--gold); padding: 13px 20px; font-size: 12px; letter-spacing: 0.22em; white-space: nowrap; }
+.kb-outline { color: var(--gold); border: 1px solid var(--gold); border-radius: var(--radius); padding: 13px 20px; font-size: 12px; letter-spacing: 0.22em; white-space: nowrap; }
 .kb-outline:hover { color: var(--gold-light); background-color: rgba(217, 162, 74, 0.1); }
 
 /* ---------- Process ---------- */
@@ -384,7 +386,7 @@ a:hover { color: var(--gold-light); }
 .faq-contact-text { margin: 0 0 26px; font-size: 16px; color: rgba(243, 235, 221, 0.82); }
 .faq-contact .contact-form { text-align: left; align-items: stretch; }
 .faq-contact .contact-form > button { align-self: center; }
-.faq-contact-btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 24px; font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none; color: var(--champagne); border: 1px solid rgba(235, 194, 122, 0.55); border-radius: 999px; transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; }
+.faq-contact-btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 24px; font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none; color: var(--champagne); border: 1px solid rgba(235, 194, 122, 0.55); border-radius: var(--radius); transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; }
 .faq-contact-btn:hover { color: var(--navy); background-color: var(--champagne); border-color: var(--champagne); }
 .faq-contact-btn { font-family: var(--sans); background: transparent; cursor: pointer; }
 .faq-contact-btn:disabled { opacity: 0.6; cursor: default; }
@@ -464,7 +466,7 @@ a:hover { color: var(--gold-light); }
   color: var(--ink-soft);
   background: transparent;
   border: 1px solid rgba(122, 90, 44, 0.45);
-  border-radius: 999px;
+  border-radius: var(--radius);
   cursor: pointer;
   transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
@@ -490,7 +492,7 @@ a:hover { color: var(--gold-light); }
   color: var(--ivory);
   background: var(--navy);
   padding: 15px 26px;
-  border-radius: 2px;
+  border-radius: var(--radius);
   transition: background-color 0.35s ease;
 }
 .booker-cta:hover { color: var(--ivory); background: #1a3358; }
@@ -601,7 +603,7 @@ a:hover { color: var(--gold-light); }
   .price-extra-d, .cta-long { display: none; }
   .price-extra-m { display: block; margin-top: 2px; }
   .cta-short { display: inline; }
-  .menu-price .kb { margin: 0; padding: 15px 22px; border: 1px solid var(--gold); border-radius: 0; font-size: 11px; letter-spacing: 0.22em; color: var(--gold); }
+  .menu-price .kb { margin: 0; padding: 15px 22px; border: 1px solid var(--gold); border-radius: var(--radius); font-size: 11px; letter-spacing: 0.22em; color: var(--gold); }
   .menu-price .kb::after { display: none; }
   .menu-price .kb:hover, .menu-price .kb:focus-visible { background-color: rgba(235, 194, 122, 0.1); border-color: var(--gold-light); }
   /* FAQ on phones: topics become two tabs side by side above the questions */
