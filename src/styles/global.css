@@ -17,7 +17,12 @@
   --sans: 'Jost', Arial, sans-serif;
   --wrap: 1240px;
   --gutter: max(20px, 4vw);
-  --radius: 6px; /* buttons match the form input boxes */
+  /* Button spec: every button on the site uses these, so they all match. */
+  --radius: 6px; /* matches the form input boxes */
+  --btn-h: 44px;
+  --btn-px: 24px;
+  --btn-fs: 11px;
+  --btn-ls: 0.22em;
 }
 
 /* ---------- Base ---------- */
@@ -100,20 +105,22 @@ a:hover { color: var(--gold-light); }
 .btn-outline {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
-  font-size: 12px;
+  min-height: var(--btn-h);
+  box-sizing: border-box;
+  font-size: var(--btn-fs);
   font-weight: 500;
-  letter-spacing: 0.22em;
+  letter-spacing: var(--btn-ls);
   text-transform: uppercase;
   text-decoration: none;
   color: var(--gold);
   border: 1px solid var(--gold);
-  padding: 13px 20px;
+  padding: 0 var(--btn-px);
   border-radius: var(--radius);
   transition: background-color 0.35s ease, color 0.35s ease;
 }
 .nav-book { gap: 0; white-space: pre; }
-.nav .btn-outline { padding: 10px 16px; }
 .btn-outline:hover { background-color: rgba(217, 162, 74, 0.1); color: var(--gold-light); }
 
 /* ---------- Hero ---------- */
@@ -147,7 +154,7 @@ a:hover { color: var(--gold-light); }
 .hero h1 { font-size: clamp(48px, 7vw, 92px); line-height: 0.98; letter-spacing: -0.01em; text-wrap: balance; }
 .hero h1 em { padding-left: 0.6em; }
 .hero-copy p { margin: 0; font-size: 17px; line-height: 1.7; max-width: 440px; color: var(--ivory-88); }
-.hero-copy .btn-outline { align-self: flex-start; margin-top: 6px; color: var(--gold-light); padding: 15px 24px; background: rgba(15, 32, 56, 0.4); }
+.hero-copy .btn-outline { align-self: flex-start; margin-top: 6px; color: var(--gold-light); background: rgba(15, 32, 56, 0.4); }
 
 /* ---------- About ---------- */
 .about { background: #fbefe2 url(/images/paper.jpg) center / cover no-repeat; }
@@ -292,7 +299,7 @@ a:hover { color: var(--gold-light); }
 .kb-ivory { color: var(--navy); background-color: var(--champagne); border-radius: 2px; padding: 12px 22px; }
 .kb-ivory:hover { color: var(--navy); background-color: #f8eeda; }
 /* Matches the gold outline buttons in the nav and hero (.btn-outline). */
-.kb-outline { color: var(--gold); border: 1px solid var(--gold); border-radius: var(--radius); padding: 13px 20px; font-size: 12px; letter-spacing: 0.22em; white-space: nowrap; }
+.kb-outline { display: inline-flex; align-items: center; justify-content: center; min-height: var(--btn-h); box-sizing: border-box; margin-top: 0; color: var(--gold); border: 1px solid var(--gold); border-radius: var(--radius); padding: 0 var(--btn-px); font-size: var(--btn-fs); letter-spacing: var(--btn-ls); line-height: 1; white-space: nowrap; }
 .kb-outline:hover { color: var(--gold-light); background-color: rgba(217, 162, 74, 0.1); }
 
 /* ---------- Process ---------- */
@@ -386,7 +393,7 @@ a:hover { color: var(--gold-light); }
 .faq-contact-text { margin: 0 0 26px; font-size: 16px; color: rgba(243, 235, 221, 0.82); }
 .faq-contact .contact-form { text-align: left; align-items: stretch; }
 .faq-contact .contact-form > button { align-self: center; }
-.faq-contact-btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 24px; font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none; color: var(--champagne); border: 1px solid rgba(235, 194, 122, 0.55); border-radius: var(--radius); transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; }
+.faq-contact-btn { display: inline-flex; align-items: center; justify-content: center; min-height: var(--btn-h); box-sizing: border-box; padding: 0 var(--btn-px); font-size: var(--btn-fs); font-weight: 500; letter-spacing: var(--btn-ls); text-transform: uppercase; text-decoration: none; color: var(--champagne); border: 1px solid rgba(235, 194, 122, 0.55); border-radius: var(--radius); transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; }
 .faq-contact-btn:hover { color: var(--navy); background-color: var(--champagne); border-color: var(--champagne); }
 .faq-contact-btn { font-family: var(--sans); background: transparent; cursor: pointer; }
 .faq-contact-btn:disabled { opacity: 0.6; cursor: default; }
@@ -483,15 +490,19 @@ a:hover { color: var(--gold-light); }
 .booker-pay p { margin: 0; max-width: 440px; font-size: 16px; line-height: 1.7; color: var(--ink-soft); }
 .booker-cta {
   margin-top: 8px;
-  display: inline-block;
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--btn-h);
+  box-sizing: border-box;
+  font-size: var(--btn-fs);
   font-weight: 500;
-  letter-spacing: 0.22em;
+  letter-spacing: var(--btn-ls);
   text-transform: uppercase;
   text-decoration: none;
   color: var(--ivory);
   background: var(--navy);
-  padding: 15px 26px;
+  padding: 0 var(--btn-px);
   border-radius: var(--radius);
   transition: background-color 0.35s ease;
 }
@@ -603,7 +614,7 @@ a:hover { color: var(--gold-light); }
   .price-extra-d, .cta-long { display: none; }
   .price-extra-m { display: block; margin-top: 2px; }
   .cta-short { display: inline; }
-  .menu-price .kb { margin: 0; padding: 15px 22px; border: 1px solid var(--gold); border-radius: var(--radius); font-size: 11px; letter-spacing: 0.22em; color: var(--gold); }
+  .menu-price .kb { margin: 0; display: inline-flex; align-items: center; min-height: var(--btn-h); box-sizing: border-box; padding: 0 var(--btn-px); border: 1px solid var(--gold); border-radius: var(--radius); font-size: var(--btn-fs); letter-spacing: var(--btn-ls); color: var(--gold); }
   .menu-price .kb::after { display: none; }
   .menu-price .kb:hover, .menu-price .kb:focus-visible { background-color: rgba(235, 194, 122, 0.1); border-color: var(--gold-light); }
   /* FAQ on phones: topics become two tabs side by side above the questions */
@@ -627,7 +638,7 @@ a:hover { color: var(--gold-light); }
   .nav .wrap { flex-wrap: nowrap; padding-block: 12px; }
   .brand-word { height: 12px; }
   .brand-logo { height: 30px; }
-  .nav .btn-outline { padding: 10px 14px; font-size: 10px; min-height: 44px; white-space: nowrap; }
+  .nav .btn-outline { padding: 0 14px; white-space: nowrap; }
   .brand { flex-shrink: 1; min-width: 0; }
   .nav-toggle {
     display: grid;
