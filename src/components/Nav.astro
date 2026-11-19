@@ -15,7 +15,7 @@ const { home = '' } = Astro.props as { home?: string };
       <a href={`${home}#faq`}>FAQ</a>
     </nav>
     <div class="nav-actions">
-      <a class="btn-outline nav-book" href={`${home}#book`}>Book<span class="nav-book-long"> a session</span></a>
+      <a class="btn-outline nav-book" href={`${home}#book`} data-umami-event="Book a session (menu)">Book<span class="nav-book-long"> a session</span></a>
       <button class="nav-toggle" type="button" aria-controls="nav-links" aria-expanded="false" aria-label="Menu">
         <span></span><span></span>
       </button>

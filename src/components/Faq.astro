@@ -75,7 +75,7 @@ import { faqGroups, CONTACT_EMAIL } from '../data/site';
             <button class="faq-contact-btn" type="submit">Send message</button>
             <p class="contact-status" role="status" aria-live="polite"></p>
           </form>
-          <p class="contact-alt">Or email me at <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+          <p class="contact-alt">Or email me at <a href={`mailto:${CONTACT_EMAIL}`} data-umami-event="Email link (contact form)">{CONTACT_EMAIL}</a></p>
         </div>
       </div>
     </div>
@@ -98,6 +98,7 @@ import { faqGroups, CONTACT_EMAIL } from '../data/site';
       form.reset();
       form.classList.add('is-sent');
       status.textContent = "Thank you. Your message is on its way, and I'll get back to you soon.";
+      (window as any).umami?.track('Message sent');
     } catch {
       status.textContent = "Sorry, that didn't send. Please email me at hello@katchannels.com instead.";
     } finally {
