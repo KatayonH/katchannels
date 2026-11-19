@@ -211,4 +211,4 @@ export const buttonStyles = [
 
 // Umami Cloud website ID (Umami > Settings > Websites > Edit > Website ID).
 // While this is empty the site keeps using GoatCounter, so visits are never left uncounted.
-export const UMAMI_WEBSITE_ID = '';
+export const UMAMI_WEBSITE_ID = 'dbcac634-4fac-46d1-a671-b98409d07ac0';
