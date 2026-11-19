@@ -289,6 +289,9 @@ a:hover { color: var(--gold-light); }
 .kb-fade:hover { color: #fff6e4; background-color: rgba(246, 227, 168, 0.06); }
 .kb-ivory { color: var(--navy); background-color: var(--champagne); border-radius: 2px; padding: 12px 22px; }
 .kb-ivory:hover { color: var(--navy); background-color: #f8eeda; }
+/* Matches the gold outline buttons in the nav and hero (.btn-outline). */
+.kb-outline { color: var(--gold); border: 1px solid var(--gold); padding: 13px 20px; font-size: 12px; letter-spacing: 0.22em; white-space: nowrap; }
+.kb-outline:hover { color: var(--gold-light); background-color: rgba(217, 162, 74, 0.1); }
 
 /* ---------- Process ---------- */
 .process { position: relative; overflow: hidden; background: #fbefe2; }
@@ -598,7 +601,7 @@ a:hover { color: var(--gold-light); }
   .price-extra-d, .cta-long { display: none; }
   .price-extra-m { display: block; margin-top: 2px; }
   .cta-short { display: inline; }
-  .menu-price .kb { margin: 0; padding: 15px 22px; border: 1px solid rgba(235, 194, 122, 0.55); border-radius: 999px; font-size: 10px; letter-spacing: 0.2em; }
+  .menu-price .kb { margin: 0; padding: 15px 22px; border: 1px solid var(--gold); border-radius: 0; font-size: 11px; letter-spacing: 0.22em; color: var(--gold); }
   .menu-price .kb::after { display: none; }
   .menu-price .kb:hover, .menu-price .kb:focus-visible { background-color: rgba(235, 194, 122, 0.1); border-color: var(--gold-light); }
   /* FAQ on phones: topics become two tabs side by side above the questions */

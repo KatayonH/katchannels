@@ -178,7 +178,7 @@ export const faqGroups = [
 
 // Session button style used in production. The dev-only switcher can override it on localhost.
 export const design = {
-  button: 'kb-arrow',
+  button: 'kb-outline',
   hero: 'ivy-arch',
 };
 
@@ -206,4 +206,5 @@ export const buttonStyles = [
   { label: '9 Star', cls: 'kb-star' },
   { label: '10 Faded lines', cls: 'kb-fade' },
   { label: '11 Solid ivory', cls: 'kb-ivory' },
+  { label: '12 Gold outline', cls: 'kb-outline' },
 ];

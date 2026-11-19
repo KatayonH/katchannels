@@ -65,7 +65,7 @@ const first = sessions[0];
                   <h3 class="display">{s.title} <em>{s.titleItalic}</em></h3>
                   <div class="menu-meta">{o.count === 1 ? '1 animal' : `${o.count} animals`} · {s.meta}</div>
                   <p>No time slot needed. Pay securely through Stripe, then send me a photo, the name and the species {o.count === 1 ? 'of your animal' : 'of each animal'}. Your {o.count === 1 ? 'reading arrives' : 'readings arrive'} in your inbox within 7 days.</p>
-                  <a class="booker-cta" href={o.booking.url}>Pay {o.price} and book</a>
+                  <a class="booker-cta" href={o.booking.url} target="_blank" rel="noopener">Pay {o.price} and book</a>
                 </div>
               ) : (
                 <div class="cal-frame" data-cal-link={o.booking.calLink} data-cal-ns={o.count === 1 ? s.id : `${s.id}${o.count}`}>
